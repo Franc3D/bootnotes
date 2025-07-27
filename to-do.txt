@@ -1,0 +1,4 @@
+Stuff to do
+
+create Anki cards
+	little quiz to help memorisation 

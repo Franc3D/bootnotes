@@ -1,0 +1,462 @@
+Notes on how to use Git
+
+
+Git is a fancy version control system that allows you to manage a project
+with non commital changes until you are certain.
+
+To install Git you can
+git --version
+# verify if it is already installed
+sudo apt install git-all
+# Install Git the whole friggin program
+
+Don't forget to read the manual
+man git
+
+Porcelain and plumbing
+There are 2 types of commands, porcelain are high-level commands that
+interacts with my code.
+git status, add, commit, push, pull ,log, etc.
+Plumbing are more [...]
+git apply, commit-tree, hash-object
+
+GIT CONFIG
+
+To configure git you will need to use git config
+you can get your git name/email using 
+git config --get user.name
+# This will return your git username
+However if the name isn't set it is preferable to add it first (user.email)
+git config --add --global user.name "name"
+# This will add your git username to the git config ~/.gitconfig
+
+We can also set the default branch in git config
+git config --global init.defaultBranch master
+# Now if a branch is using the default value it will use ~/.gitconfig and
+# take the name master
+use cat ~/.gitconfig to verify these informations
+
+At the START of the project
+Create a REPOSITORY (repo) on the root directory of your project
+git init
+# This will create a hidden .git directory on the current directory
+# The project is now able to use git functions 
+
+file status
+A file can be one of 3 status in a Git Repository
+	untracked: Not being tracked by Git (red)
+	staged: Marked for inclusion in the next commit (green)
+	committed: Saved to the repository's history
+
+git status
+# This gives you the status of all files in the Repository
+
+Stage a file
+Untracked file need to be turned into a staged file, this process will 
+add the file to the index of the repository
+git add untracked.md
+# this will make the untracked file staged, git will now be able to manage
+# these files (green in status)
+
+Commit a file
+A commit will take a snapshot of the current file and applies the change
+to the current branch. Any uncommited changes are at risk of getting lost
+git commmit -m "message for clarity"
+# This will commit ALL of the staged files in the repository and (-m) add
+# a message that helps identify what the changes entails.
+
+RECAP
+
+git status
+# Gives the details of your repository
+git add
+# Stage a file
+git commit
+# Apply the changes to the current branch
+git log (git --no-pager log -n 10)
+# Shows a history of the commits made (...that limits the nb shown)
+
+
+***INTERNALS***
+
+commit hash (or SHA-1)
+Each commit has a unique identifyer called a hash that looks like this :
+5ba786fcc93e8092831c01e71444b9baa2228a4f
+
+all the data from the repository can be found in .got/objects
+The file should begin with the first 2 numbers of your hash
+It is unfortunately compressed to raw bytes
+
+To read a file that has been compressed to raw bytes you can :
+xxd path/to/file/from-before
+# This will open the file in a hexadecimal format that looks like this
+00000000: 7801 9d8e 416a 0421 1000 73f6 15fd 810c  x...Aj.!..s.....
+00000010: 6aeb b4c2 1292 a768 db66 0d33 eba2 6ede  j......h.f.3..n.
+00000020: 9f79 43a8 5b41 4171 3fcf b6c0 baf0 b686  .yC.[AAq?.......
+00000030: 08b8 e862 ae17 d117 c1e0 253b 962a 2c44  ...b......%;.*,D
+00000040: 8672 f541 5b9b 4d44 f54c 431e 0b68 2f18  .r.A[.MD.LC..h/.
+00000050: 02ed ecc9 b1ad 3654 24e3 aa43 da03 c55a  ......6T$..C...Z
+00000060: 1143 f61a 9d4a af75 ef03 ce56 e096 fbeb  .C...J.u...V....
+00000070: 48a5 c9d8 ea48 0f6e f3f3 fb4c edd8 b89f  H....H.n...L....
+00000080: 1f60 c823 1a8d 5ec3 bb76 5aab cb5e 8b4b  .`.#..^..vZ..^.K
+00000090: fe15 abaf 52a4 001f 69ce c673 e3f9 0bab  ....R...i..s....
+000000a0: c3ba 0b3c 47ff 115e ea0f 96b4 4f76       ...<G..^....Ov
+
+Cat file
+Git has a built in plumbing command called cat-file that allows us to
+explore commits easily. 
+git cat-file -p <hash>
+# This will give us a way to see all the information related to the hash
+git cat-file -p <hash> > /tmp/catfileout.txt
+# This will store the information in a temporary file
+
+Tree and blob
+When exploring the hash of a commit using cat-file you will find data 
+including a hash named tree, the author and a commit message.
+We cannot see the message of the file itself because it is further in the
+hash sequence.
+
+By looking at the hash for the tree you will find the blob hash
+
+Commit hash(snapshot in time) v
+			      Tree(directory) v
+					      Blob(file content)
+
+		
+*** GIT CONFIG***
+
+You can change the configuration of a git project via git config
+This will modify the file located in ~/.gitconfig
+These include
+git config --add --global user.name "YourName"
+git config --add --global user.email "Your@email.here"
+
+git config --list --local
+# This will show you the content of the local config
+
+git config --get user.name (<section>.<keyname>)
+# This will get the first information from the key (<section>.<keyname>)
+
+git config --unset <section>.<keyname>
+# This will remove the first occurence of a specific key 
+
+git config --unset-all <section>.<keyname>
+# This will remove ALL instances of a specific key
+# Adding -all to most options will allow the option to cover all data 
+# instead of the first data found.
+
+That being said you can have duplicate of the same key carrying different
+information. For instance company.employee will have multiple employee.
+in that case make sure to use --get-all to get all the data.
+
+To remove a <section> without specifying a <keyname> you can use
+git config --remove-section <section>
+# This will get rid of the entire section 
+
+Locationsystem: /etc/gitconfig, a file that configures Git for all users on the system
+global: ~/.gitconfig, a file that configures Git for all projects of a user
+local: .git/config, a file that configures Git for a specific project
+worktree: .git/config.worktree, a file that configures Git for part of a project
+Git can be configured in multiple places as a hierarchy :
+
+system: /etc/gitconfig, a file that configures Git for all users on the system
+  vv
+global: ~/.gitconfig, a file that configures Git for all projects of a user
+  vv
+local: .git/config, a file that configures Git for a specific project
+g  vv
+worktree: .git/config.worktree, a file that configures Git for part of a project
+
+--global is the most used in general as it includes the projects directly.
+--local is used sometimes to tweak a specific project
+
+As you go lower in the hierarchy the keys will automatically default to the
+location higher than itself if it does not have a value of its own.
+If --local has no user.name it will take --global user.name
+
+
+***WHAT IS A BRANCH***
+
+See the current branches active using 
+git branch
+
+Rename a branch 
+git branch -m oldname newname
+
+changing the init.defaultBranch could be useful (?)
+git config --global init.defaultBranch="main"
+
+Create a new branch
+git branch (-c) my_new_branch
+# this will create a new branch (-c will have it switch to it)
+
+Switch to a different branch
+git switch other_branch
+# you are now in the other branch, use git branch to see the active branch
+
+To do the entire step of commiting a brand new file to git
+Create file [untracked]
+git add file.csv [staged]
+git commit -m "added file.csv" [commited]
+# And voilà you have a brand new commit that added the file to the branch !
+
+Git Log customization
+decorate= full, short or no
+git log --decorate=full
+# this will also grant you the ref name of each commit
+git log --oneline
+# This will severely compact the output, making it only take 1 line
+# Using both is pretty handy too
+
+You can find the head of all branches by going into .git/refs/heads
+there is 1 file per branch that contains the hash of the latest commit
+
+
+***MERGE***
+
+Merging will send a branch back to the main branch by applying all changes
+
+A - B - C    main
+   \
+    D - E    other_branch
+
+vvvvvvvvvvvvvv
+
+A - B - C - F    main
+   \     /
+    D - E        other_branch
+
+
+While on the main branch (git switch main)
+git merge other_branch
+# This will take the other_branch and commit all the changes to main in a
+# new commit
+in more details the merge will :
+1.Find the "merge base" commit, or "best common ancestor" of the two branches. In this case, A.
+2.Replay the changes from main, starting from the best common ancestor, into a new commit.
+3.Replay the changes from vimchadsonly onto main, starting from the best common ancestor.
+4.Records the result as a new commit, in our case, F.
+5.F is special because it has two parents, C and E.
+
+git log --oneline --decorate --graph --parents
+# This will show you how the graph has merged visually
+
+Fast forward merge
+if your branches look like this : 
+      C     delete_vscode
+     /
+A - B       main
+
+# The merge code will do a fast-forward merge that will result in this
+            delete_vscode
+A - B - C   main
+# no commit is created in that case since delete_vscode became the new main
+
+This is a common workflow when working with Git on a team of developers:
+
+1.Create a branch for a new change
+2.Make the change
+3.Merge the branch back into main (or whatever branch your team dubs the "default" branch)
+4.Remove the branch
+5.Repeat 
+
+Delete/remove a branch
+git branch -d unused_branch
+# This will remove the branch entirely 
+
+
+***REBASE***
+
+Make the new branch and turn it into the NEW MAIN. It is ideal  for solo 
+projects as confilcts can emerge if multiple branches exist
+
+A - B - C    main
+   \
+    D - E    feature_branch
+
+vvvvv
+
+A - B - C         main
+         \
+          D - E   feature_branch
+
+
+New branch from an old commit, even an outdated one
+git switch -c update_dune COMMITHASH
+# Using the hash from an old commit this will give us an old version of 
+# the project
+
+From that old commit you can bring it up to date if you rebase main
+git rebase main
+# This will take your current branch and append it to the end of main
+# Every changes present in main will be applied to your branch and then
+# All the branch changes will be applied on top of that
+
+
+***RESETING OR UNDOING***
+
+If you made a mistake or dislike a change and you need to go back to a 
+	previous version of a commit
+git reset --soft COMMITHASH
+# --soft will turn the commited changes into uncommited. This way you can
+# review the files
+
+git reset --hard COMMITHASH
+# This will delete all the changes after the commit
+# This is irreversible as there is no longer a commit available going forward
+
+
+
+***GIT REMOTE***
+
+You can add a remote that acts like its own repo, kinda like a github.
+git remote add <name> <uri>
+# This will link the <uri> database to the current one
+
+fetch is necessary to get all the data from the good database to this one
+( information only )
+git fetch (inside local project directory)
+# This will bring forth all the metadata files from the main project
+# This means that you have no commit and no files
+
+Remote log
+You can get the log from the master project 
+git log <name>/<branch>
+# This will give the log from the faraway repo
+
+Remote merge. You can remote merge a local and remote repo 
+( bring all data over )
+
+git merge <name>/<branch>
+# This will bring forth the desired commit from remote as well as all
+# the files. 
+
+
+
+***GITHUB***
+
+GitHub is an online storage area that uses Git
+
+GitHub Repo setup (linking your project to GitHub)
+1. Create a brand new repository on the GitHub webpage using the name of 
+	your project
+2. (1 time) install the GitHub CLI to allow for some GitHub commands
+3. Authenticate using gh auth login : gh auth login
+	GitHub.com
+	HTTPS
+	YES
+	Login to a web browser
+4. Go to the location of your project folder in Bash
+5. Add a remote to your project pointing to your GitHub Repo
+	git remote add origin https://github.com/Franc3D/webflyx.git
+	# find the address on your GitHub repo webpage
+6. Verify that the remote worked using 
+	git ls-remote
+	# From https://github.com/Franc3D/webflyx.git
+
+Git push
+Sends local changes to any remote, this will only send the metadata 
+(local to GitHub)
+git push origin <branch>
+# This will send all the commits to your GitHub server 
+
+git pull [<remote>/<branch>]
+Take the data from the remote and apply it to the local. [] is optionnal.
+This will take place in the web browser on GiHub.com
+1. On github press edit this file 
+2. press the commit button and change the title of the commit
+
+back on bash
+3. Ensure we do a merge by entering git config pull.rebase false
+4. pull the new commit with git pull origin main
+5. A new merge commit will be created, rename
+
+and here you go, you just imported the change from GitHub to bash
+
+Pull Requests on GitHub
+When you send a push request on GitHub it has to get approved before 
+it is integrated. 
+1. Push a new branch with : git push origin add_classics
+2. on GitHub go the the Pull Request tab
+3. From there you can adjust the details of the push request and finish 
+	its creation.
+The team now has access to the details of the pull request, we are ready 
+to merge
+
+merging in GitHub
+In a team you would need approval to merge to main but as a solo dev you
+	can do whatever you want.
+
+1. on GitHub in the pull request tab, confirm the merge + commit message
+2. Press the button to delete the current workbranch (if not main)
+3. on bash in main branch : git pull origin main to get the confirmation
+	metadata ( visible as a commit )
+4. Delete the work branch ( not main )
+# now your request is merged in GitHub and you got the confirmation in 
+# local. Everything is up to date. Your comorkers will have to pull the
+# new main to their personal branch to stay up to date. 
+
+Insights on workflow
+rebase is easier to follow than merge as a solo dev, think of it as main
+	being version 0.1 while the rebase is the 0.2 in progress.
+git config --global pull.rebase true
+# This will always rebase instead of merging 
+
+Use GitHub to backup your project, it can't catch fire probably
+
+Solo workflow: 
+	
+	Make changes to files
+	git add . (or git add <files> if I only want to add specific files)
+	git commit -m "a message describing the changes"
+	git push origin main
+	git log --oneline
+
+Team Workflow
+	
+1.Update my local main branch with git pull origin main
+2.Checkout a new branch for the changes I want to make with 
+	git switch -c <branchname>
+Make changes to files
+3.git add .
+4.git commit -m "a message describing the changes"
+5.git push origin <branchname> (I push to the new branch name, not main)
+6.Open a pull request on GitHub to merge my changes into main
+7.Ask a team member to review my pull request
+8.Once approved, click the "Merge" button on GitHub to merge my changes 
+	into main
+9.Delete my feature branch, and repeat with a new branch for the next set
+	 of changes
+
+Gitignore
+a .gitignore file will tell git to ignore specific files
+You can create a .gitignore file everywhere you wish in your project
+Modify the content of the file to include the text like :
+	# add comments
+	duck.txt
+	*.txt
+	!important.txt ( the ! allows for exceptions, will be let throughç)
+	/main.py ( the root / is where the .gitignore file is )
+	private/*
+	!private/duck_info.txt
+
+What should your ignore ?
+1. Ignore things that can be generated 
+	(e.g. compiled code, minified files, etc.)
+2. Ignore dependencies (e.g. node_modules, venv, packages, etc.)
+3. Ignore things that are personal or specific to how you like to work 
+	(e.g. editor settings)
+4. Ignore things that are sensitive or dangerous 
+	(e.g. .env files, passwords, API keys, etc.)
+
+
+Pandoc
+Converts files from one format to another
+.md > html for instance
+pandoc advert.md -o advert.html
+# This creates a brand new advert.html based on the advert.md file
+
+open html file in a browser
+explorer.exe advert.html
+# opens the file in default browser
+

@@ -1,0 +1,267 @@
+Notes from the 2-LINUX course in Boot.dev
+
+***THE TERMINAL AND SHELL***
+
+Displays the text on the console. Also called standard output
+echo "Hello world"
+# Hello world
+
+Display own name
+whoami
+# RoyGoodman
+
+To do math use the expr function with + - \* / or %(modulo)
+expr 123 + 456
+# 579
+
+Create a variable
+name="Lane"
+Use a variable
+$ echo $name
+# Lane
+Incorporate a variable in a string 
+$ echo Hello $name
+# Hello Lane
+
+Voir toutes les commandes entrés à la main
+history
+
+clear terminal of all clutter
+clear (or CTRL + L)
+
+To modify the startup file you may edit the .bashrc file
+nano ./bashrc
+# This will show all the data for the booting sequence of Ubuntu
+
+***THE FILESYSTEM***
+
+Display the filepath to your current directory
+pwd
+# /home/roygoodman
+
+The filepath you are currently in can be called using a single dot .
+
+
+Display all directories and files in the current directory
+ls (optional: add a path)
+# Downloads  bootnotes  go  webflyx  worldbanc
+ls -a ~
+# Will show the home directory(~) and show all hidden files 
+
+Move into a directory
+cd worldbanc
+# The pwd is now /home/roygoodman/worldbanc
+Move back one directory
+cd ..
+# The pwd is now /home/roygoodman
+cd ~
+# Return to the home directory
+
+Absolute VS relative paths, either :
+/home/roygoodman/worldbanc/public/pr_ideas.txt
+or
+pr_ideas.txt (while user is already in /home/roygoodman/worldbanc/public)
+
+***INTERACTING WITH FILES and FOLDERS***
+
+View (read) the content of a file (or multiple)
+cat file1.txt (Optional: file2.txt file3.txt)
+# The content of file1.txt
+
+Reading a file using head (start of file) or tail (end of file) 
+head -n 10 file1.txt (-n 10 = number of line == 10)
+
+Reading a file using less is a great way to go through a file intractively
+less -N file.csv
+-N optional to add line numbers
+# The content of file.csv with a scrollable diplay
+
+Create a file if the name does not exist using touch
+touch new_file.txt (optional new_file2.txt,...)
+# A brand new file is generated or nothing happens if it already exists
+
+Create a brand new directory at the current location using mkdir
+mkdir my_directory
+# added current_directory/my_directory/
+
+move and/or rename a file around using mv
+mv some_text_file.txt new_name_for_text_file.txt
+# Change the specified file name into the new name
+mv some_text_file.txt other_directory/some_text_file.txt
+# Moved the file to a new directory. Possible to use ../ to move backward too
+
+Delete a file or directory using rm
+rm some_file.txt
+# Will delete the one specified file
+rm -r some_directory
+# Will delete the directory and (-r) delete all the content of the file recursively
+
+Copy a file or directory to a new location using cp
+cp file.txt destination/ (Absolute (/path) or Relative (rest of path)
+# Will create a copy of the file in the new directory
+cp -R current_directory copied_directory
+# Will copy a directory and (-R) will recursively copy every files inside
+
+Search a word inside a file and return the line it was found in using grep
+grep "hello" words.txt
+# will print out every lines where the word hello was present
+you can search multiple files or an entire directory
+grep "hello" file1.txt file2.txt file3.txt
+grep -r "hello" .
+# This will go through multiple files
+
+To search for a specific file use the find command
+find some_directory -name lost_file.txt
+# This will search for the file lost_file.txt inside some_directory
+find some_directory -name "*.txt"
+# This will search for a file ending with .txt inside some_directory (* fills)
+
+***PERMISSIONS***
+
+sudo allows you to use a command as a superuser granting you elevated
+options. Use if you temporarily require root level access. USE WITH CAUTION!!
+sudo rm -rf /'? (the root)
+# This will delete your ENTIRE PC files. DO NOT ATTEMPT !
+
+drwxrwxrwx is a 10 character string that grants permissions based on 
+the letter enabled. These letters may apply to files and directory
+# d--------- establishes if it is a Directory or a file
+# -r--r--r-- permission for Reading
+# --w--w--w- permission for Writing
+# ---x--x--x permission for eXecuting
+# -rwx------ permissions of the owner
+# ----rwx--- permissions of the group (excessively rare)
+# -------rwx permissions of others (the rest) 
+
+You can change the permission on any file/directory using chmod
+chmod -R u=rwx,g=,o= my_directory
+# Everything in my_directory can only be read-write-execute as the user
+You can quickly do changes using formulas like :
+chmod -x executable.sh
+# This will remove the permission to execute the program on all level
+chmod u+x executable.sh
+# This will give permission to the user to execute the program again
+
+You can see all the permission in a directory using ls -l
+ls -l
+# will show all the informations of every files in a folder including
+# the permission in the 10 digit form
+
+You may change the owner of a file/directory by using the chown command
+sudo chown -R root my_directory
+# will change the my_directory and all it's content recursively to the 
+# user root (highest possible privilege user, will require sudo to interact)
+ 
+
+***PROGRAMS***
+
+Compiled program
+# is readable for computer but unreadable for a human, executable on its own
+# goes fast but offer little customisation
+Interpreted programs
+# Readable by humans but need to go through an interpreter to execute
+# More malleable but runs slower since it needs to be interpreted
+# A .sh shell script will get interpreted by the shell program
+which sh
+# Will tell you the location of the sh (shell) program
+# which is itself a compiled programm
+
+Executable or programs are files that will perform actions when executed    
+./program.sh                                                                
+# will execute the program.sh located in the current directory (.)          
+You have to preface the executable with at least ./ for it to work,         
+writing the name alone will not suffice                                     
+mydir/program.sh                    
+# will execute the program within the directory mydir
+
+For programs that do not find the interpreter on their own use shebang to
+set it up. The shebang must be written inside the script file at the start.
+#!/usr/bin/env bash  
+# This contains the #! + path to the env command + the name of the
+# interpreter as an argument to env
+#!/usr/bin/python3
+# this is what a normal pathway usually looks like 
+
+You may create environment variables in your shell
+name="Lane"
+echo $name
+# Lane is written
+# Usable in the console or in script, is very handy to store data
+export NAME="Lane"
+# This will set the variable in your shell
+env 
+# this will show all the set variables in your shell
+echo "Hi I am $NAME"
+# Hi I am Lane : is printed
+
+PATH is a handy way have specific paths be auto-checked when calling a 
+program. It contains all the important paths separated with (:). 
+For instance if export PATH="" (PATH resets every session)
+/bin/ls 
+# ls would no be allowed to be used as is and now requires /bin/ beforehand
+Since PATH is a modifiable environment variable you may add new paths
+export PATH="$PATH:/path/to/new"
+# This will add the path at the end of the current PATH
+
+Permanent changes
+To permanently add the PATH to memory you must edit the ./bashrc file and
+add the change there. This will apply the change everytime you open a 
+console. 
+
+
+***INPUT & OUTPUT***
+
+To read the manual you can use the man function
+man man 
+# This will open the manual for manual
+to search inside a manual 
+/stuff
+Alternatively you may use -h, --help or help as an argument for a more 
+to-the-point kind of ressource. 
+
+Flags are additions to a command that will shape the result
+ls -a
+# will show all hidden files
+ls -la
+# will show all hidden files and show a long listing of file
+There is 2 ways to call a flag -(letter) or --(word) not always 2 available
+ 
+Positional arguments are necessary for functions to perform tasks
+mv file.txt newfile.txt
+# This function has 2 arguments, the file location and the destination
+ls
+# This function will work with no arguments as it uses . by default
+
+ 
+Exit codes are like the returns in Python, it will return a 0 or a 1
+showing if the program was successful. Use it after any program to check
+if it ran correctly. Great for debugging !
+ls ~ ***OR*** ls does/not/exist
+echo $?
+# 0 (success) ***OR*** 1 (failure)
+
+Standard output or stdout is the default place where programs print their
+output. grep, ls and echo are good examples.
+echo "This is a standard output"
+# This is a standard output
+
+Standard Error or stderr is the equivalent of an error message
+It will be displayed in the same manner as a Standard output
+
+Redirecting stream applies to stdout(>) and stderr(2>), you can get the 
+message and move it directly into a text file.
+echo "Hello world" > hello.txt
+# this will create a hello.txt file with the content Hello world
+cat doesnotexist.txt 2> error.txt
+# this will create a error.txt file and write the following error
+# cat: doesnotexist.txt: No such file or directory
+
+Standard input ou stdin is a way to have the user give an information in
+a script. The script can then store the user input as a variable.
+echo "Please enter your name:"
+read NAME
+# will ask the user to type their name and store the info in variable NAME
+ 
+
+ch5 lv10
+
