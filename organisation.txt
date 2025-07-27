@@ -1,0 +1,59 @@
+How to organize a projets correctly
+
+project location
+	~/workspace/HOSTNAME/USERNAME/REPONAME
+	which might look a little something like this
+	~/workspace/github.com/bootdotdev/curriculum
+
+If you start your project on GitHub most of it is already configured
+	Start by creating a repo on github
+	create a directory leading to ~/workspace/HOSTNAME/USERNAME/REPONAME
+	git clone https://github.com/Franc3D/bookbot.git
+	The project has been added after REPONAME/
+
+Send project to VScode at any time from your current location
+	code .
+	code file.txt
+
+Commit from github (a recap)
+	Change a file
+	git add . (to add all changed files)
+	git commit -m "message"
+	gh auth login (only on new platform)
+	git push origin main
+
+installing python 3 on your WSL
+	python3 --version (verify if you have it already)
+	if not:
+	sudo apt update
+	sudo apt install -y python3
+	read the installation logs
+
+What to .gitignore
+	Data like entire books should not be part of the GitHub
+	temp data should be ignored as well
+
+With block (reading a file)
+	with open(path_to_file) as f:
+    # do something with f (the file) here
+
+	# f is a file object
+	file_contents = f.read()
+	# returns the content in STRING
+
+Using multiple .py files and importing (refactoring)
+	you can store your functions in different files for convenience
+	in your main.py file you would write at the start
+	from file_name import name_of_function  EXEMPLE from stats import get_num_words
+	# do not add .py for the stats.py file !
+
+making a pretty report using .sort()
+	.sort() only works on lists, not dictionary
+	a normal list is simple enough :
+	x = [4,2,7,1,9]
+	x.sort() >>> x = [1,2,4,7,9]
+	
+	Look at the sort.py file for more information
+
+
+
