@@ -361,7 +361,7 @@ git push origin <branch>
 # This will send all the commits to your GitHub server 
 
 git pull [<remote>/<branch>]
-Take the data from the remote and apply it to the local. [] is optionnal.
+Take the data from the remote and apply it to the local. [] is optional.
 This will take place in the web browser on GiHub.com
 1. On github press edit this file 
 2. press the commit button and change the title of the commit
