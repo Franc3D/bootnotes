@@ -1,0 +1,94 @@
+Terminologies to know when coding
+
+***OOP-Object oriented programming***
+
+DRY - Don't repeat yourself
+    Make sure that if a formula is to be repeated you must put it in a function
+
+Variables
+
+
+Function
+    Allows code to be useful multiple times 
+
+    Def name_of_function(propertie, propertie2,...)
+        code of function here
+    Called using name_of_function(argument(s))
+
+    Examples of functions
+        len(list) -­­> Give the length of a list
+        print(text) -­> Print to stdout (standard output)
+
+
+Class and Objects
+    A Class is a way to store data for an object
+    class Soldier:
+        # A class usually contains properties
+        health = 5
+        armor = 3
+        damage = 2
+
+    An object is an instance of a class
+        for instance, the following objects :
+        health = 50 is an INSTANCE of an integer
+        aragorn = Soldier() is an INSTANCE of a Soldier class type
+
+    Get the properties of an object this way :
+        current_health = aragorn.health
+        # current_health = 5
+
+    Constructors
+    makes initialising an object safer and more configurable
+        class Soldier:
+            def __init__(self, name, armor, num_weapons):
+                self.name = name
+                self.armor = armor
+                self.num_weapons = num_weapons
+        
+        # Upon creating a Soldier object you will be able to define all the properties
+        soldier_one = Soldier("Steve", 3, 2)
+            # All the properties have been filled right at the start
+
+    
+Methods
+    A method is just a function that's tied directly to the class and has access to its properties
+    Here us an example of a soldier taking damage
+
+        class Soldier:
+            health = 5
+
+            # This is a method that reduces the health of the soldier
+            def take_damage(self, damage):        SELF refers to the object the method is being called upon
+                self.health -= damage
+
+        soldier_one = Soldier()
+        soldier_one.take_damage(2)
+        print(soldier_one.health)
+        # prints "3"
+
+    self has to be the first parameter in your methods otherwise an error will occur
+
+    Your method can return values if necessary
+        class Soldier:
+            armor = 2
+            num_weapons = 2
+
+            def get_speed(self):
+                speed = 10
+                speed -= self.armor
+                speed -= self.num_weapons
+                return speed                   #Returns the calculated speed as a value
+
+        soldier_one = Soldier()
+        print(soldier_one.get_speed())
+        # prints "6"
+
+
+
+
+
+
+The basic terms in shell
+    stdout -> Standard output (print() usually)
+    stdin -> Reading an input (input() lets the user write)
+    stderr -> standard error (for when things go wrong)
