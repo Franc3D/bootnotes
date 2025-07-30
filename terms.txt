@@ -83,7 +83,17 @@ Methods
         print(soldier_one.get_speed())
         # prints "6"
 
+Class variables VS Instanced variables
 
+	Class variables
+		They apply to ALL instances of a class making them rarely useful
+		# A Soldier class may have a class variable that is a description of the unit
+		Soldier.description = ("Does shooty-shoot-shoot")
+		# soldier_one & soldier_two now have access to the description
+
+	Instanced variables
+		The variables used is unique to each instances of a class, making each object unique
+		# ex. Keeping count of the HP value of a unit
 
 
 

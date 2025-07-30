@@ -33,7 +33,7 @@ What to .gitignore
 	Data like entire books should not be part of the GitHub
 	temp data should be ignored as well
 
-With block (reading a file)
+With block (reading and storing the content of a file)
 	with open(path_to_file) as f:
     # do something with f (the file) here
 
