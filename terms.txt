@@ -95,6 +95,27 @@ Class variables VS Instanced variables
 		The variables used is unique to each instances of a class, making each object unique
 		# ex. Keeping count of the HP value of a unit
 
+Exceptions
+    They are a clean way to halt the code once something unusual is encountered
+    (In a class) 
+    def is_alive(self)
+        if self.health <= 0:
+                raise Exception(f"{self.name} is dead")
+            
+    # This will halt the code and return a stderr showing the message
+    # Display the message using a try : Except
+    try:
+        player.is_alive()
+    except Exception as e
+        print("Exception caught",e)
+
+    # Exceptions have many built-in class names each looking for different things
+        Exception
+        NameError
+        ValueError
+        IndexError
+        ZeroDivisionError
+
 
 
 
