@@ -95,6 +95,101 @@ Class variables VS Instanced variables
 		The variables used is unique to each instances of a class, making each object unique
 		# ex. Keeping count of the HP value of a unit
 
+Public or private properties
+    By default, properties are all public
+    To turn properties private simply put 2 __ before the property name during __init__
+    class Wall:
+        def __init__(self, armor, magic_resistance):
+            self.__armor = armor
+            self.__magic_resistance = magic_resistance
+    
+    front_wall = Wall(10, 20)
+
+    # This results in an error
+    print(front_wall.__armor)
+
+    Useful of you don't want the properties themselves to be used but would rather use methods form the class.
+    If you are a bakery, don't show your flour or eggs, rather show your bread and pastries made using those ingredients
+
+
+ENCAPSULATION AND ABSTRACTION
+    make the use of functions intuitive, make sure it's obvious what happens inside with the name alone
+    if a function created by a rocket scientist is called caculate_rocket_acceleration(mass,thrust,wind_resistance)
+    There is no need for you to become a rocket scientist yourself, just give it the values and get the acceleration 
+
+    1) Abstraction -    is about creating a simple interface for complex behavior. It focuses on what's exposed (public).
+                            They need to be made well right away because changing functions later can be disastrous
+    2) Encapsulation -  is about hiding internal state. It focuses on tucking away the implementation details (private).
+                            Hide values you don't want people to use using __value.
+
+    Generally you will want to make the interface as easy to use as possible using these phylosophies
+
+
+INHERITANCE
+    Inheritance allows a "child" class, to inherit properties and methods from a "parent" class. It's a way to share code between classes
+    if you have a class Human
+    and you make a class Archer(Human)
+    The archer class now has all the properties and methods of Human on top of being able to add its own
+    
+    super[].__init__(data, data2, etc.)    <-- Parent __init__
+    self.__num_arrows = num_arrows         <-- Child __init__
+    to set the parent properties.
+
+    It saves a lot of time over redoing all the work you already did once and if 
+
+    Tiger ­> feline > animal > LivingThings
+    Inheritance can go pretty deep !
+
+POLYMORPHISM
+    If all classes have the same .move() method they can all be called in quick succession using something like :
+        for creature in [Creature(), Dragon(), Kraken()]:
+            creature.move()   
+
+    Function signature
+    If the name, input and output are all the same across methods in multiple class it is said that they have the same function signature.
+    It means that 2 different class could call the methods with identical signatures the same way.
+    class Human:
+        def hit_by_fire(self):
+            self.health -= 5
+            return self.health
+
+    class Archer:
+        def hit_by_fire(self):    # def hit_by_fire(self, EXTRA_PARAMETER): # would not have same signature as Human
+            self.health -= 10
+            return self.health
+
+    for unit in [archer_unit, human_unit]
+        print(unit.hit_by_fire())
+        # Would print for both class types without issue
+
+OPERATOR OVERLOADING (+ - * / in classes)
+    Adding your own operators (+) to a class using __add__ 
+    normally you can do 2 + 4 or "string " + "add" but you cannot add 2 class values together unless...
+
+    Operation 	Operator 	Method
+    Addition 	        + 	__add__
+    Subtraction 	    - 	__sub__
+    Multiplication 	    * 	__mul__
+    Power 	            ** 	__pow__
+    Division 	        / 	__truediv__
+    Floor Division 	    // 	__floordiv__
+    Remainder (modulo) 	% 	__mod__
+    Bitwise Left Shift 	<< 	__lshift__
+    Bitwise Right Shift >> 	__rshift__
+    Bitwise AND 	    & 	__and__
+    Bitwise OR 	        | 	__or__
+    Bitwise XOR 	    ^ 	__xor__
+    Bitwise NOT 	    ~ 	__invert__
+
+    the __str__ built in method can be called with the print function
+        print(class_object)
+        # <Point object at 0xa0acf8>
+
+    You can modify the print command by creating a method __str__ (__repr__ also works but is reserved for debugging using eval())
+        def __str__(self):
+            return f"I am {self.name}, the {self.color} dragon"
+            # I am Smaugh the red dragon
+
 Exceptions
     They are a clean way to halt the code once something unusual is encountered
     (In a class) 
