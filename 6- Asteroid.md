@@ -25,13 +25,19 @@ This tells Python that this project requires pygame version 2.6.1.
 ```
 uv run -m pygame
 ```
+### To execute your main.py
+Trying to run any .py files in the project using python3 main.py may result in errors. To execute the project in the virtual environment use the command below.
+```
+uv run main.py
+```
+CTRL + C to close
 
 
 
 # Working inside the main 
 
 ## Modules
-###importing
+### Importing
 In Python, each .py file is a module, and we can import functions, variables, and classes from one module into another with the import statement. The name of a module is the filename (without the .py extension).
 ```
 # import the connect_database function
@@ -45,7 +51,30 @@ Or if you want to import everything
 # database.py into the current file
 from database import *
 ```
+## FPS
+### Delta time
+We use "delta time" to represent the amount of time that has passed since the last frame was drawn. Decoupling the game speed from the speed it's being drawn to the screen will prevent the game from running based on your processor's speed.
+```
+# Declare after pygame.init()
+clock = pygame.time.Clock()
+delta_time = 0
+
+# Declare at the very end
+dt = clock.tick(60) / 1000   
+```
+The .tick() method will wait the amount of time declared as 1/x seconds (60). It also stored the amount of time in seconds(in milliseconds without the / 1000) the window was active that frame (before the wait).  
+## Draw player
+
+
 
 ```
 
 ```
+
+
+
+
+
+
+
+
