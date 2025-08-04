@@ -1,0 +1,11 @@
+Tiny character with huge tongue 2d platformer
+ - turning licks around you
+ - looking up licks up
+ - holding down make you stand on your tongue
+ - Checkpoints are lolipops
+ - no jumping ?
+ - Can slide on tongue down slopes
+ - spicy = bad
+ - Sweets = sticky (need to hold down)
+ - collect surfaces like coins maybe ?
+ - Puzzle like gameplay ?
