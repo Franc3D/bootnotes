@@ -96,9 +96,43 @@ clock = pygame.time.Clock()
 delta_time = 0
 
 # Declare at the very end
-dt = clock.tick(60) / 1000   
+delta_time = clock.tick(60) / 1000   
 ```
 The .tick() method will wait the amount of time declared as 1/x seconds (60). It also stored the amount of time in seconds(in milliseconds without the / 1000) the window was active that frame (before the wait).  
+The .tick() function also returns the current amount of time since the last drawn frame. Therefore, we will want that data to be stored in the delta_time variable.
+
+# Sprites
+Sprites are used to visualy represent shapes, images or other visual representation. The easiest to create is a circle
+## Making Shape class using pygame
+### Circle
+The circle is a bit unique amongst all shapes, it has no edges and must be created using a point in space and add a radius on top of it. The Circle is the most basic of all shape therefore we will use it as a base to create other shapes.
+```
+import pygame
+
+# Base class for game objects
+class CircleShape(pygame.sprite.Sprite):
+    def __init__(self, x, y, radius):
+        # we will be using this later
+        if hasattr(self, "containers"):
+            super().__init__(self.containers)
+        else:
+            super().__init__()
+
+        self.position = pygame.Vector2(x, y)
+        self.velocity = pygame.Vector2(0, 0)
+        self.radius = radius
+
+    def draw(self, screen):
+        # sub-classes must override
+        pass
+
+    def update(self, dt):
+        # sub-classes must override
+        pass
+
+```
+
+
 ## Draw player
 
 
